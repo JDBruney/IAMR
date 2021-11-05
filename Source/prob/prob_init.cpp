@@ -349,13 +349,14 @@ void NavierStokes::init_RayleighTaylor (Box const& vbx,
   {
     Real x = problo[0] + (i - domlo.x + 0.5)*dx[0];
     Real y = problo[1] + (j - domlo.y + 0.5)*dx[1];
-
-    const Real pertheight = 0.5 + IC.pertamp*(std::cos(2.0*Pi*x/Lx)
-					      + std::cos(2.0*Pi*(Lx-x)/Lx));
+	constexpr Real MU    = 0.0;
+	constexpr Real ETA    = 1.0/16.0;
+	constexpr Real OMEGA    = 0.5;
+    const Real pertheight = min(MU+ETA*pow(x,2),OMEGA);
 
     scal(i,j,k,0) = IC.rho_1 + ((IC.rho_2-IC.rho_1)/2.0)*(1.0+std::tanh((y-pertheight)/IC.interface_width));
-    scal(i,j,k,1) = IC.tra_1 + ((IC.tra_2-IC.tra_1)/2.0)*(1.0+std::tanh((y-pertheight)/IC.interface_width));
-    for ( int nt=2; nt<nscal; nt++)
+    //scal(i,j,k,1) = IC.tra_1 + ((IC.tra_2-IC.tra_1)/2.0)*(1.0+std::tanh((y-pertheight)/IC.interface_width));
+    for ( int nt=1; nt<nscal; nt++)
     {
       scal(i,j,k,nt) = 1.0;
     }

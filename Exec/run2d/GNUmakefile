@@ -1,6 +1,8 @@
 #AMREX_HOME defines the directory in which we will find the BoxLib directory
 AMREX_HOME ?= ../../../amrex
 AMREX_HYDRO_HOME ?= ../../../AMReX-Hydro
+#AMREX_HYPRE_HOME ?= ../../../amrex/Src/Extern/HYPRE
+AMREX_HYPRE_HOME ?= ../../../hypre/src/hypre
 
 #TOP defines the directory in which we will find Source, Exec, etc.
 TOP = ../..
@@ -14,13 +16,14 @@ PRECISION   = DOUBLE
 DIM         = 2
 COMP        = gnu
 
-DEBUG       = FALSE
-USE_MPI     = FALSE
-USE_OMP     = FALSE
+DEBUG       = TRUE
+USE_MPI     = TRUE
+USE_OMP     = TRUE
 PROFILE     = FALSE
 
+USE_EB= FALSE
 USE_CUDA = FALSE
-
+USE_HYPRE = TRUE
 USE_SENSEI_INSITU = FALSE
 
 EBASE = amr

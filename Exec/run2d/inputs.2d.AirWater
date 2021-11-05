@@ -1,0 +1,181 @@
+#*******************************************************************************
+# INPUTS.2D.AirWater
+#*******************************************************************************
+
+#NOTE: You may set *either* max_step or stop_time, or you may set them both.
+
+# Maximum number of coarse grid timesteps to be taken, if stop_time is
+#  not reached first.
+max_step	= 800
+
+# Time at which calculation stops, if max_step is not reached first.
+stop_time 		    =1.0
+
+# Also refine on density differences to start with all levels THIS IS NO LONGER USED
+#ns.do_density_ref = 1
+#ns.do_denminmax=1 
+
+#amr.refinement_indicators = vorticity
+#amr.vorticity.vorticity_greater =  0.1
+
+amr.refinement_indicators = density
+amr.density.max_level = 4
+amr.density.adjacent_difference_greater = .00001
+amr.density.field_name = density
+
+#*******************************************************************************
+
+# Number of cells in each coordinate direction at the coarsest level
+amr.n_cell  	  = 256  128
+
+amr.grid_eff = 0.8
+
+#*******************************************************************************
+
+# Maximum level (defaults to 0 for single level calculation)
+amr.max_level		  = 4 # maximum number of levels of refinement
+
+#*******************************************************************************
+
+# Interval (in number of level l timesteps) between regridding
+amr.regrid_int 	      = 1
+
+#*******************************************************************************
+
+# Refinement ratio as a function of level
+amr.ref_ratio	      = 2 2 2 2 2
+
+#*******************************************************************************
+
+# Sets the "NavierStokes" code to be verbose
+ns.v                    = 10
+
+#*******************************************************************************
+
+# Sets the "amr" code to be verbose
+amr.v                   = 10
+mac.v                   = 10
+macop.v                 = 10
+hypre.bamg_verbose      = 1
+# set multigrid verbosity
+#mg.v                    = 10
+nodal_proj.bottom_verbose = 10
+mac_proj.bottom_verbose = 10
+#*******************************************************************************
+
+# Interval (in number of coarse timesteps) between checkpoint(restart) files
+amr.check_int  	      = -1
+
+#*******************************************************************************
+
+# Interval (in number of coarse timesteps) between plot files
+amr.plot_int          = 5
+#amr.plot_per   	      = .00014286
+
+#*******************************************************************************
+
+# Force a particular timestep:
+
+#ns.fixed_dt = 0.1
+
+#*******************************************************************************
+
+# CFL number to be used in calculating the time step : dt = dx / max(velocity)
+ns.cfl                  = 0.3  # CFL number used to set dt
+
+#*******************************************************************************
+
+# Factor by which the first time is shrunk relative to CFL constraint
+ns.init_shrink          = 0.1  # factor which multiplies the very first time step
+
+# make changes in dt small - ICs are unphysical with zero velocity, so need to
+# ramp up dt very slowly.  Maybe can loosen this after ~100 steps 
+ns.change_max = 1.01
+
+#*******************************************************************************
+
+# Viscosity coefficient 
+ns.vel_visc_coef        = 0.0
+
+#*******************************************************************************
+
+# Diffusion coefficient for first scalar
+ns.scal_diff_coefs      = 0.0
+
+#*******************************************************************************
+
+# Forcing term defaults to  rho * abs(gravity) "down"
+ns.gravity              = -9806.65  
+
+#*******************************************************************************
+prob.probtype= 10
+prob.rho_1=.001
+prob.rho_2=.0001
+# .01
+prob.interface_width = 0.01
+prob.perturbation_amplitude = 0.005
+
+
+#*******************************************************************************
+
+# Set to 0 if x-y coordinate system, set to 1 if r-z.
+geometry.coord_sys   =  1
+
+#*******************************************************************************
+
+# Physical dimensions of the low end of the domain.
+geometry.prob_lo     =  0. 0. 
+
+# Physical dimensions of the high end of the domain.
+geometry.prob_hi     =  8.0 2.0
+#200 100
+
+#*******************************************************************************
+
+#Set to 1 if periodic in that direction
+geometry.is_periodic =  0 0
+
+#*******************************************************************************
+
+# Boundary conditions on the low end of the domain. xlow ylow
+ns.lo_bc             = 3 4
+
+# Boundary conditions on the high end of the domain. xhigh yhigh
+ns.hi_bc             = 4 2
+
+# 0 = Interior/Periodic  3 = Symmetry
+# 1 = Inflow             4 = SlipWall
+# 2 = Outflow            5 = NoSlipWall
+
+#*******************************************************************************
+#eb2.geom_type    =  all_regular
+#*******************************************************************************
+#max_coarsening_level = 0
+# to use hypre in MAC projection
+#mac_proj.bottom_solver=hypre
+# for nodal projection
+#nodal_proj.bottom_solver=hypre
+#hypre.hypre_preconditioner=BoomerAMG
+#hypre.adjust_singular_matrix= true
+#*******************************************************************************
+# geometric coarsening within amrex.
+mac_proj.mg_max_coarsening_level = 0
+nodal_proj.mg_max_coarsening_level = 0
+
+# For solver reasons, use multigrid iterations as the bottom solve.
+mg.maxiter = 1000
+
+# Can probably crank this back down later in the simulation
+mac.mac_tol = 1.e-8
+proj.proj_tol = 1e-8
+#*******************************************************************************
+
+# Factor by which grids must be coarsenable.
+#amr.blocking_factor     = 2
+
+#*******************************************************************************
+
+# Add vorticity to the variables in the plot files.
+amr.derive_plot_vars    = mag_vort   diveru   avg_pressure
+
+#*******************************************************************************
